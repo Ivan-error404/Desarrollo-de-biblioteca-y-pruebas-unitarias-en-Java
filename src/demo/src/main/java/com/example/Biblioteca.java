@@ -1,38 +1,48 @@
 package com.example;
 
 public class Biblioteca {
-    private String titulo;
-    private boolean prestado;
+    private Libro[] libros;
+    private int totalLibros;
 
-    public Biblioteca(String titulo) {
-        this.titulo = titulo;
-        this.prestado = false;
+    public Biblioteca() {
+        this(10);
     }
 
-    public String getTitulo() {
-        return titulo;
+    public Biblioteca(int capacidadInicial) {
+        if (capacidadInicial <= 0) {
+            capacidadInicial = 10;
+        }
+        this.libros = new Libro[capacidadInicial];
+        this.totalLibros = 0;
     }
 
-    public boolean isPrestado() {
-        return prestado;
-    }
-
-    public void prestar() {
-        if (!prestado) {
-            prestado = true;
-            System.out.println("El libro '" + titulo + "' ha sido prestado.");
+    public void addLibro(Libro libro) {
+        if (libro != null) {
+            ensureCapacity();
+            libros[totalLibros++] = libro;
         } else {
-            System.out.println("El libro '" + titulo + "' ya está prestado.");
+            System.out.println("No se puede añadir un libro nulo.");
         }
     }
 
-    public void devolver() {
-        if (prestado) {
-            prestado = false;
-            System.out.println("El libro '" + titulo + "' ha sido devuelto.");
-        } else {
-            System.out.println("El libro '" + titulo + "' no estaba prestado.");
+    private void ensureCapacity() {
+        if (totalLibros >= libros.length) {
+            Libro[] nuevo = new Libro[libros.length * 2];
+            System.arraycopy(libros, 0, nuevo, 0, libros.length);
+            libros = nuevo;
         }
+    }
+
+    public int getTotalLibros() {
+        return totalLibros;
+    }
+
+    public Libro getLibro(int indice) {
+        if (indice < 0 || indice >= totalLibros) {
+            System.out.println("Índice fuera de rango: " + indice);
+            return null;
+        }
+        return libros[indice];
     }
 }
 // FIn  
